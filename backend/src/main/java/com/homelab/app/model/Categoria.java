@@ -41,6 +41,3 @@ public class Categoria {
     private List<Transacao> transacoes;
 }
 
-enum TipoCategoria {
-    RECEITA, DESPESA
-}

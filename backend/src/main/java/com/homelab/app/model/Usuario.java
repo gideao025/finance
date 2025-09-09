@@ -67,6 +67,3 @@ public class Usuario {
     private List<Notificacao> notificacoes;
 }
 
-enum Role {
-    USER, ADMIN, MODERATOR
-}

@@ -73,11 +73,3 @@ public class Transacao {
     }
 }
 
-enum TipoTransacao {
-    RECEITA, DESPESA, TRANSFERENCIA
-}
-
-enum TipoRecorrencia {
-    NENHUMA, DIARIA, SEMANAL, MENSAL, BIMESTRAL, 
-    TRIMESTRAL, SEMESTRAL, ANUAL
-}

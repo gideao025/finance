@@ -90,6 +90,3 @@ public class TransacaoRecorrente {
     }
 }
 
-enum Periodicidade {
-    SEMANAL, MENSAL, TRIMESTRAL, ANUAL
-}

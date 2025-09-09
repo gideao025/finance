@@ -49,6 +49,3 @@ public class Vale {
     private LocalDateTime atualizadoEm;
 }
 
-enum TipoVale {
-    ALIMENTACAO, COMBUSTIVEL, TRANSPORTE, SAUDE, EDUCACAO
-}

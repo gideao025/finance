@@ -13,48 +13,47 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    
-    @Value("${app.jwt.secret}")
-    private String jwtSecret;
-    
-    @Value("${app.jwt.expiration:86400000}")
-    private int jwtExpirationInMs;
-    
+
+    private final String jwtSecret = "mySecretKey";
+    private final int jwtExpirationInMs = 604800000; // 7 days
+
+    private final Key key;
+
+    public JwtTokenProvider() {
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        
-        Date expiryDate = new Date(System.currentTimeMillis() + jwtExpirationInMs);
-        
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-        
+
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .subject(Long.toString(userPrincipal.getId()))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
+                .signWith(key)
                 .compact();
     }
-    
-    public Long getUserIdFromJWT(String token) {
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-        
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        
-        return Long.parseLong(claims.getSubject());
-    }
-    
-    public boolean validateToken(String authToken) {
+
+    public boolean validateToken(String token) {
         try {
-            Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
+            Jwts.parser()
+                    .verifyWith((SecretKey) key)
+                    .build()
+                    .parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException ex) {
-            log.error("Token JWT inválido", ex);
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("Invalid JWT token: {}", e.getMessage());
+            return false;
         }
-        return false;
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith((SecretKey) key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return Long.parseLong(claims.getSubject());
     }
 }

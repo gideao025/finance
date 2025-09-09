@@ -43,6 +43,3 @@ public class Notificacao {
     private LocalDateTime dataLeitura;
 }
 
-enum TipoNotificacao {
-    INFO, AVISO, ERRO, SUCESSO, COBRANCA, LIMITE
-}
