@@ -1,0 +1,185 @@
+// Global responsive utilities and overrides
+
+// Hide elements on mobile
+@include mobile {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+// Hide elements on desktop
+@include desktop {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+// Show only on mobile
+.show-mobile {
+  display: none !important;
+  
+  @include mobile {
+    display: block !important;
+  }
+}
+
+// Show only on desktop
+.show-desktop {
+  display: block !important;
+  
+  @include mobile {
+    display: none !important;
+  }
+}
+
+// Responsive text sizes
+.text-responsive {
+  @include mobile {
+    font-size: 0.875rem;
+  }
+  
+  @include tablet {
+    font-size: 1rem;
+  }
+  
+  @include desktop {
+    font-size: 1.125rem;
+  }
+}
+
+// Responsive spacing
+.spacing-responsive {
+  @include mobile {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm);
+  }
+  
+  @include tablet {
+    padding: var(--spacing-md);
+    margin: var(--spacing-md);
+  }
+  
+  @include desktop {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg);
+  }
+}
+
+// Responsive grid
+.grid-responsive {
+  display: grid;
+  gap: var(--spacing-md);
+  
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+  
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+// Responsive flex
+.flex-responsive {
+  display: flex;
+  gap: var(--spacing-md);
+  
+  @include mobile {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  @include tablet {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+  
+  @include desktop {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--spacing-lg);
+  }
+}
+
+// Angular Material responsive overrides
+.mat-sidenav-container {
+  @include mobile {
+    .mat-sidenav {
+      box-shadow: var(--shadow-lg);
+    }
+  }
+}
+
+.mat-toolbar {
+  @include mobile {
+    padding: 0 var(--spacing-sm) !important;
+    min-height: 56px !important;
+  }
+}
+
+.mat-card {
+  @include mobile {
+    margin: var(--spacing-xs) !important;
+    padding: var(--spacing-md) !important;
+  }
+}
+
+.mat-form-field {
+  @include mobile {
+    width: 100% !important;
+  }
+}
+
+// Table responsive
+.mat-table {
+  @include mobile {
+    .mat-column-actions {
+      width: 60px;
+    }
+    
+    .mat-header-cell,
+    .mat-cell {
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Button responsive
+.mat-raised-button,
+.mat-flat-button,
+.mat-stroked-button {
+  @include mobile {
+    min-width: auto !important;
+    padding: 0 var(--spacing-md) !important;
+    
+    &.full-width-mobile {
+      width: 100% !important;
+    }
+  }
+}
+
+// Dialog responsive
+.mat-dialog-container {
+  @include mobile {
+    margin: var(--spacing-md) !important;
+    max-width: calc(100vw - #{var(--spacing-lg)}) !important;
+    max-height: calc(100vh - #{var(--spacing-lg)}) !important;
+  }
+}
+
+// Snackbar responsive
+.mat-snack-bar-container {
+  @include mobile {
+    margin: var(--spacing-sm) !important;
+    max-width: calc(100vw - #{var(--spacing-md)}) !important;
+  }
+}

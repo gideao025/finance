@@ -1,0 +1,233 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.stats-card {
+  @include card-style;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-fast);
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-500);
+    transition: var(--transition-fast);
+  }
+  
+  // Color variants
+  &--primary::before {
+    background: var(--primary-500);
+  }
+  
+  &--success::before {
+    background: var(--success-500);
+  }
+  
+  &--error::before {
+    background: var(--error-500);
+  }
+  
+  &--warning::before {
+    background: var(--warning-500);
+  }
+  
+  &--info::before {
+    background: var(--info-500);
+  }
+  
+  mat-card-content {
+    padding: var(--spacing-lg);
+    
+    .stats-header {
+      @include flex-between;
+      margin-bottom: var(--spacing-lg);
+      
+      .stats-icon {
+        @include flex-center;
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-md);
+        background: var(--secondary-50);
+        
+        lucide-icon {
+          width: 24px;
+          height: 24px;
+          color: var(--primary-500);
+        }
+      }
+      
+      .stats-change {
+        @include flex-start;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        
+        lucide-icon {
+          width: 14px;
+          height: 14px;
+        }
+        
+        &.change-positive {
+          background: var(--success-50);
+          color: var(--success-700);
+          
+          lucide-icon {
+            color: var(--success-600);
+          }
+        }
+        
+        &.change-negative {
+          background: var(--error-50);
+          color: var(--error-700);
+          
+          lucide-icon {
+            color: var(--error-600);
+          }
+        }
+      }
+    }
+    
+    .stats-content {
+      .stats-value {
+        @include heading-2;
+        color: var(--text-primary);
+        margin: 0 0 var(--spacing-xs) 0;
+        font-weight: var(--font-weight-bold);
+      }
+      
+      .stats-title {
+        @include body-text;
+        color: var(--text-secondary);
+        margin: 0;
+        font-weight: var(--font-weight-medium);
+      }
+    }
+  }
+}
+
+// Color-specific icon backgrounds
+.stats-card--primary .stats-icon {
+  background: var(--primary-50);
+  
+  lucide-icon {
+    color: var(--primary-500);
+  }
+}
+
+.stats-card--success .stats-icon {
+  background: var(--success-50);
+  
+  lucide-icon {
+    color: var(--success-500);
+  }
+}
+
+.stats-card--error .stats-icon {
+  background: var(--error-50);
+  
+  lucide-icon {
+    color: var(--error-500);
+  }
+}
+
+.stats-card--warning .stats-icon {
+  background: var(--warning-50);
+  
+  lucide-icon {
+    color: var(--warning-500);
+  }
+}
+
+.stats-card--info .stats-icon {
+  background: var(--info-50);
+  
+  lucide-icon {
+    color: var(--info-500);
+  }
+}
+
+// Responsive adjustments
+@include respond-to('sm') {
+  .stats-card {
+    mat-card-content {
+      padding: var(--spacing-md);
+      
+      .stats-header {
+        margin-bottom: var(--spacing-md);
+        
+        .stats-icon {
+          width: 40px;
+          height: 40px;
+          
+          lucide-icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+        
+        .stats-change {
+          font-size: var(--font-size-xs);
+          
+          lucide-icon {
+            width: 12px;
+            height: 12px;
+          }
+        }
+      }
+      
+      .stats-content {
+        .stats-value {
+          font-size: var(--font-size-xl);
+        }
+        
+        .stats-title {
+          font-size: var(--font-size-sm);
+        }
+      }
+    }
+  }
+}
+
+// Loading state
+.stats-card.loading {
+  .stats-content {
+    .stats-value,
+    .stats-title {
+      background: var(--secondary-100);
+      border-radius: var(--radius-sm);
+      color: transparent;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    .stats-value {
+      height: 32px;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .stats-title {
+      height: 20px;
+      width: 80%;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

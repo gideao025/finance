@@ -1,0 +1,300 @@
+<div class="cards-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Meus Cartões</h1>
+        <p>Gerencie seus cartões de crédito e débito</p>
+      </div>
+      <div class="header-actions">
+        <button mat-stroked-button (click)="generateVirtualCard()">
+          <lucide-icon name="smartphone"></lucide-icon>
+          Cartão Virtual
+        </button>
+        <button mat-raised-button color="primary" (click)="requestCard()">
+          <lucide-icon name="plus"></lucide-icon>
+          Solicitar Cartão
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="cards-grid">
+    <div 
+      *ngFor="let card of cards; trackBy: trackByCardId" 
+      class="card-item"
+      [attr.data-brand]="card.brand"
+      [attr.data-type]="card.type">
+      
+      <mat-card class="credit-card" [style.background]="card.color">
+        <mat-card-content>
+          <!-- Card Header -->
+          <div class="card-header">
+            <div class="card-info">
+              <div class="card-type">
+                <lucide-icon [name]="getCardTypeIcon(card.type)"></lucide-icon>
+                <span>{{ card.type === 'credit' ? 'Crédito' : 'Débito' }}</span>
+              </div>
+              <div class="card-virtual" *ngIf="card.isVirtual">
+                <mat-chip class="virtual-chip">Virtual</mat-chip>
+              </div>
+            </div>
+            <div class="card-brand">
+              <lucide-icon [name]="getBrandIcon(card.brand)"></lucide-icon>
+            </div>
+          </div>
+
+          <!-- Card Number -->
+          <div class="card-number">
+            {{ formatCardNumber(card.lastFourDigits) }}
+          </div>
+
+          <!-- Card Name -->
+          <div class="card-name">
+            {{ card.name }}
+          </div>
+
+          <!-- Card Status -->
+          <div class="card-status">
+            <mat-chip [ngClass]="'status-' + card.status">
+              {{ getStatusText(card.status) }}
+            </mat-chip>
+          </div>
+        </mat-card-content>
+
+        <!-- Card Actions -->
+        <mat-card-actions>
+          <button mat-icon-button [matMenuTriggerFor]="cardMenu" class="card-menu-btn">
+            <lucide-icon name="more-horizontal"></lucide-icon>
+          </button>
+          <mat-menu #cardMenu="matMenu">
+            <button mat-menu-item (click)="viewCardDetails(card)">
+              <lucide-icon name="eye"></lucide-icon>
+              <span>Ver Detalhes</span>
+            </button>
+            <button mat-menu-item (click)="viewStatement(card)" *ngIf="card.type === 'credit'">
+              <lucide-icon name="file-text"></lucide-icon>
+              <span>Ver Fatura</span>
+            </button>
+            <button mat-menu-item (click)="payBill(card)" *ngIf="card.type === 'credit' && card.currentBalance > 0">
+              <lucide-icon name="credit-card"></lucide-icon>
+              <span>Pagar Fatura</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="blockCard(card)" *ngIf="card.status === 'active'">
+              <lucide-icon name="lock"></lucide-icon>
+              <span>Bloquear</span>
+            </button>
+            <button mat-menu-item (click)="unblockCard(card)" *ngIf="card.status === 'blocked'">
+              <lucide-icon name="unlock"></lucide-icon>
+              <span>Desbloquear</span>
+            </button>
+            <button mat-menu-item (click)="cancelCard(card)" class="danger-action">
+              <lucide-icon name="x-circle"></lucide-icon>
+              <span>Cancelar</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Card Details -->
+      <mat-card class="card-details">
+        <mat-card-content>
+          <div class="details-grid">
+            <!-- Credit Card Details -->
+            <div *ngIf="card.type === 'credit'" class="credit-details">
+              <div class="detail-item">
+                <span class="detail-label">Limite Total</span>
+                <span class="detail-value">{{ formatCurrency(card.limit) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Limite Disponível</span>
+                <span class="detail-value available">{{ formatCurrency(card.availableLimit) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Fatura Atual</span>
+                <span class="detail-value" [ngClass]="card.currentBalance > 0 ? 'negative' : 'neutral'">
+                  {{ formatCurrency(card.currentBalance) }}
+                </span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Vencimento</span>
+                <span class="detail-value" [ngClass]="getDaysUntilDue(card.dueDate) <= 5 ? 'warning' : 'neutral'">
+                  {{ card.dueDate | date:'dd/MM/yyyy' }}
+                  <small>({{ getDaysUntilDue(card.dueDate) }} dias)</small>
+                </span>
+              </div>
+
+              <!-- Usage Progress -->
+              <div class="usage-progress">
+                <div class="progress-header">
+                  <span class="progress-label">Uso do Limite</span>
+                  <span class="progress-percentage">{{ getLimitUsagePercentage(card) | number:'1.0-0' }}%</span>
+                </div>
+                <mat-progress-bar 
+                  mode="determinate" 
+                  [value]="getLimitUsagePercentage(card)"
+                  [ngClass]="getLimitUsagePercentage(card) > 80 ? 'high-usage' : 'normal-usage'">
+                </mat-progress-bar>
+              </div>
+            </div>
+
+            <!-- Debit Card Details -->
+            <div *ngIf="card.type === 'debit'" class="debit-details">
+              <div class="detail-item">
+                <span class="detail-label">Saldo Disponível</span>
+                <span class="detail-value available">{{ formatCurrency(card.availableLimit) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Tipo de Conta</span>
+                <span class="detail-value">Conta Corrente</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Tabs Section -->
+  <mat-card class="tabs-card">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+      <!-- Recent Transactions Tab -->
+      <mat-tab label="Transações Recentes">
+        <div class="tab-content">
+          <div class="transactions-list">
+            <div 
+              *ngFor="let transaction of recentTransactions; trackBy: trackByTransactionId" 
+              class="transaction-item">
+              
+              <div class="transaction-icon">
+                <lucide-icon name="credit-card"></lucide-icon>
+              </div>
+
+              <div class="transaction-details">
+                <div class="transaction-header">
+                  <span class="transaction-description">{{ transaction.description }}</span>
+                  <span class="transaction-amount negative">
+                    {{ formatCurrency(transaction.amount) }}
+                  </span>
+                </div>
+                <div class="transaction-meta">
+                  <span class="transaction-card">
+                    {{ getCardForTransaction(transaction.cardId)?.name }}
+                  </span>
+                  <span class="transaction-date">
+                    {{ transaction.date | date:'dd/MM/yyyy' }}
+                  </span>
+                  <mat-chip 
+                    class="transaction-status" 
+                    [ngClass]="'status-' + transaction.status">
+                    {{ transaction.status === 'processed' ? 'Processada' : 'Pendente' }}
+                  </mat-chip>
+                </div>
+                <div class="transaction-installments" *ngIf="transaction.installments">
+                  <span class="installments-info">
+                    {{ transaction.currentInstallment }}/{{ transaction.installments }} parcelas
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="recentTransactions.length === 0">
+              <lucide-icon name="credit-card"></lucide-icon>
+              <h3>Nenhuma transação recente</h3>
+              <p>Suas transações com cartão aparecerão aqui.</p>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Benefits Tab -->
+      <mat-tab label="Benefícios">
+        <div class="tab-content">
+          <div class="benefits-grid">
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <lucide-icon name="shield-check"></lucide-icon>
+              </div>
+              <div class="benefit-content">
+                <h3>Proteção contra Fraudes</h3>
+                <p>Monitoramento 24h e notificações em tempo real para transações suspeitas.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <lucide-icon name="gift"></lucide-icon>
+              </div>
+              <div class="benefit-content">
+                <h3>Programa de Pontos</h3>
+                <p>Acumule pontos a cada compra e troque por produtos e serviços.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <lucide-icon name="plane"></lucide-icon>
+              </div>
+              <div class="benefit-content">
+                <h3>Seguro Viagem</h3>
+                <p>Cobertura internacional para suas viagens com tranquilidade.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <lucide-icon name="percent"></lucide-icon>
+              </div>
+              <div class="benefit-content">
+                <h3>Cashback</h3>
+                <p>Receba de volta parte do valor gasto em categorias selecionadas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Settings Tab -->
+      <mat-tab label="Configurações">
+        <div class="tab-content">
+          <div class="settings-list">
+            <div class="setting-item">
+              <div class="setting-info">
+                <h3>Notificações de Transação</h3>
+                <p>Receba alertas por SMS e email para cada transação.</p>
+              </div>
+              <button mat-stroked-button>Configurar</button>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <h3>Limites de Segurança</h3>
+                <p>Defina limites diários e mensais para suas transações.</p>
+              </div>
+              <button mat-stroked-button>Configurar</button>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <h3>Bloqueio Temporário</h3>
+                <p>Bloqueie temporariamente seus cartões em caso de perda.</p>
+              </div>
+              <button mat-stroked-button>Configurar</button>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <h3>Fatura Digital</h3>
+                <p>Receba sua fatura por email e contribua com o meio ambiente.</p>
+              </div>
+              <button mat-stroked-button>Configurar</button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

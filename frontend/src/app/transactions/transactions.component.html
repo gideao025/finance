@@ -1,0 +1,215 @@
+<div class="transactions-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Transações</h1>
+        <p>Gerencie todas as suas transações financeiras</p>
+      </div>
+      <div class="header-actions">
+        <button mat-stroked-button (click)="exportTransactions()">
+          <lucide-icon name="download"></lucide-icon>
+          Exportar
+        </button>
+        <button mat-raised-button color="primary" (click)="addTransaction()">
+          <lucide-icon name="plus"></lucide-icon>
+          Nova Transação
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="filters-form">
+        <div class="filters-row">
+          <!-- Search -->
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Buscar transações</mat-label>
+            <input matInput formControlName="search" placeholder="Digite para buscar...">
+            <lucide-icon matPrefix name="search"></lucide-icon>
+          </mat-form-field>
+
+          <!-- Category -->
+          <mat-form-field appearance="outline">
+            <mat-label>Categoria</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Account -->
+          <mat-form-field appearance="outline">
+            <mat-label>Conta</mat-label>
+            <mat-select formControlName="account">
+              <mat-option *ngFor="let account of accounts" [value]="account">
+                {{ account }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Type -->
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="all">Todos</mat-option>
+              <mat-option value="income">Receitas</mat-option>
+              <mat-option value="expense">Despesas</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filters-row">
+          <!-- Date From -->
+          <mat-form-field appearance="outline">
+            <mat-label>Data inicial</mat-label>
+            <input matInput [matDatepicker]="dateFromPicker" formControlName="dateFrom">
+            <mat-datepicker-toggle matSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dateFromPicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Date To -->
+          <mat-form-field appearance="outline">
+            <mat-label>Data final</mat-label>
+            <input matInput [matDatepicker]="dateToPicker" formControlName="dateTo">
+            <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dateToPicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Status -->
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statuses" [value]="status">
+                {{ status === 'Todos' ? status : getStatusText(status) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Clear Filters -->
+          <button mat-stroked-button type="button" (click)="clearFilters()" class="clear-filters-btn">
+            <lucide-icon name="x"></lucide-icon>
+            Limpar Filtros
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Transactions Table -->
+  <mat-card class="transactions-table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredTransactions" class="transactions-table" matSort>
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+            <td mat-cell *matCellDef="let transaction">
+              {{ transaction.date | date:'dd/MM/yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+            <td mat-cell *matCellDef="let transaction">
+              <div class="transaction-description">
+                <div class="transaction-icon">
+                  <lucide-icon [name]="getTransactionIcon(transaction.category)"></lucide-icon>
+                </div>
+                <div class="transaction-details">
+                  <div class="transaction-title">{{ transaction.description }}</div>
+                  <div class="transaction-account">{{ transaction.account }}</div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+            <td mat-cell *matCellDef="let transaction">
+              <mat-chip-set>
+                <mat-chip>{{ transaction.category }}</mat-chip>
+              </mat-chip-set>
+              <div class="transaction-tags" *ngIf="transaction.tags && transaction.tags.length > 0">
+                <mat-chip-set>
+                  <mat-chip *ngFor="let tag of transaction.tags" class="tag-chip">
+                    {{ tag }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+            <td mat-cell *matCellDef="let transaction">
+              <div class="transaction-amount" [ngClass]="getAmountClass(transaction.amount)">
+                <span class="amount-sign">{{ transaction.amount >= 0 ? '+' : '-' }}</span>
+                <span class="amount-value">{{ formatCurrency(transaction.amount) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let transaction">
+              <mat-chip-set>
+                <mat-chip [ngClass]="'status-' + transaction.status">
+                  {{ getStatusText(transaction.status) }}
+                </mat-chip>
+              </mat-chip-set>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let transaction">
+              <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                <lucide-icon name="more-horizontal"></lucide-icon>
+              </button>
+              <mat-menu #actionsMenu="matMenu">
+                <button mat-menu-item (click)="editTransaction(transaction)">
+                  <lucide-icon name="edit"></lucide-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="deleteTransaction(transaction)">
+                  <lucide-icon name="trash-2"></lucide-icon>
+                  <span>Excluir</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns; trackBy: trackByTransactionId"></tr>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredTransactions.length === 0">
+          <lucide-icon name="receipt"></lucide-icon>
+          <h3>Nenhuma transação encontrada</h3>
+          <p>Tente ajustar os filtros ou adicione uma nova transação.</p>
+          <button mat-raised-button color="primary" (click)="addTransaction()">
+            <lucide-icon name="plus"></lucide-icon>
+            Adicionar Transação
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <mat-paginator 
+        *ngIf="filteredTransactions.length > 0"
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

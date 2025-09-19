@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard - Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* CSS Variables - Hope UI Inspired */
+        :root {
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+
+            --secondary-50: #f9fafb;
+            --secondary-100: #f3f4f6;
+            --secondary-200: #e5e7eb;
+            --secondary-300: #d1d5db;
+            --secondary-400: #9ca3af;
+            --secondary-500: #6b7280;
+            --secondary-600: #4b5563;
+            --secondary-700: #374151;
+            --secondary-800: #1f2937;
+            --secondary-900: #111827;
+
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            --border-color: #e5e7eb;
+
+            --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --border-radius-sm: 6px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo-section {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-500);
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            margin: 4px 16px;
+            border-radius: var(--border-radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--secondary-50);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary-700);
+            border-right: 3px solid var(--primary-500);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            height: 64px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 24px;
+        }
+
+        .search-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            background: var(--bg-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .notification-btn {
+            position: relative;
+            padding: 8px;
+            border: none;
+            background: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 18px;
+            height: 18px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Page Content */
+        .page-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stats-card {
+            background: var(--bg-primary);
+            padding: 24px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stats-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stats-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stats-icon.revenue { background: var(--success); }
+        .stats-icon.expense { background: var(--error); }
+        .stats-icon.savings { background: var(--primary-500); }
+        .stats-icon.investments { background: var(--warning); }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stats-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stats-change.positive { color: var(--success); }
+        .stats-change.negative { color: var(--error); }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .dashboard-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            padding: 24px 24px 0 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .card-content {
+            padding: 0 24px 24px 24px;
+        }
+
+        /* Chart Placeholder */
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-600);
+            font-weight: 500;
+        }
+
+        /* Transaction List */
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .transaction-icon.income { background: var(--success); }
+        .transaction-icon.expense { background: var(--error); }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .transaction-category {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive { color: var(--success); }
+        .transaction-amount.negative { color: var(--error); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="material-icons">credit_card</span>
+                    </div>
+                    <span class="logo-text">Finance</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <span class="material-icons nav-icon">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons nav-icon">swap_vert</span>
+                    <span>Transações</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons nav-icon">credit_card</span>
+                    <span>Cartões</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons nav-icon">card_giftcard</span>
+                    <span>Vales</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <button class="notification-btn">
+                    <span class="material-icons">menu</span>
+                </button>
+                
+                <div class="search-container">
+                    <input type="text" class="search-field" placeholder="Buscar transações, cartões...">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <span class="material-icons">notifications</span>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="notification-btn">
+                        <span class="material-icons">account_circle</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Visão geral das suas finanças</p>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">Receitas</span>
+                            <div class="stats-icon revenue">
+                                <span class="material-icons">trending_up</span>
+                            </div>
+                        </div>
+                        <div class="stats-value">R$ 12.450,00</div>
+                        <div class="stats-change positive">
+                            <span class="material-icons">arrow_upward</span>
+                            +12.5% vs mês anterior
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">Gastos</span>
+                            <div class="stats-icon expense">
+                                <span class="material-icons">trending_down</span>
+                            </div>
+                        </div>
+                        <div class="stats-value">R$ 8.230,00</div>
+                        <div class="stats-change negative">
+                            <span class="material-icons">arrow_downward</span>
+                            +5.2% vs mês anterior
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">Economia</span>
+                            <div class="stats-icon savings">
+                                <span class="material-icons">savings</span>
+                            </div>
+                        </div>
+                        <div class="stats-value">R$ 4.220,00</div>
+                        <div class="stats-change positive">
+                            <span class="material-icons">arrow_upward</span>
+                            +18.7% vs mês anterior
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">Investimentos</span>
+                            <div class="stats-icon investments">
+                                <span class="material-icons">show_chart</span>
+                            </div>
+                        </div>
+                        <div class="stats-value">R$ 25.680,00</div>
+                        <div class="stats-change positive">
+                            <span class="material-icons">arrow_upward</span>
+                            +7.3% vs mês anterior
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Chart Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Gastos por Categoria</h3>
+                            <p class="card-subtitle">Últimos 30 dias</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-placeholder">
+                                📊 Gráfico de Gastos por Categoria
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Transações Recentes</h3>
+                            <p class="card-subtitle">Últimas movimentações</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="transaction-item">
+                                <div class="transaction-icon income">
+                                    <span class="material-icons">add</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-name">Salário</div>
+                                    <div class="transaction-category">Receita</div>
+                                </div>
+                                <div class="transaction-amount positive">+R$ 5.500,00</div>
+                            </div>
+
+                            <div class="transaction-item">
+                                <div class="transaction-icon expense">
+                                    <span class="material-icons">remove</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-name">Supermercado</div>
+                                    <div class="transaction-category">Alimentação</div>
+                                </div>
+                                <div class="transaction-amount negative">-R$ 320,50</div>
+                            </div>
+
+                            <div class="transaction-item">
+                                <div class="transaction-icon expense">
+                                    <span class="material-icons">remove</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-name">Combustível</div>
+                                    <div class="transaction-category">Transporte</div>
+                                </div>
+                                <div class="transaction-amount negative">-R$ 180,00</div>
+                            </div>
+
+                            <div class="transaction-item">
+                                <div class="transaction-icon income">
+                                    <span class="material-icons">add</span>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-name">Freelance</div>
+                                    <div class="transaction-category">Receita Extra</div>
+                                </div>
+                                <div class="transaction-amount positive">+R$ 1.200,00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

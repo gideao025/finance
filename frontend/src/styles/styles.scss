@@ -1,0 +1,248 @@
+// Import variables and mixins
+@import 'variables';
+@import 'mixins';
+
+// Global Reset and Base Styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @include custom-scrollbar;
+}
+
+// Typography
+h1 { @include heading-1; }
+h2 { @include heading-2; }
+h3 { @include heading-3; }
+p { @include body-text; }
+small { @include small-text; }
+
+// Utility Classes
+.flex-center { @include flex-center; }
+.flex-between { @include flex-between; }
+.flex-start { @include flex-start; }
+.flex-column { @include flex-column; }
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-success { color: var(--success-600); }
+.text-warning { color: var(--warning-600); }
+.text-error { color: var(--error-600); }
+
+.bg-primary { background: var(--bg-primary); }
+.bg-secondary { background: var(--bg-secondary); }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+
+// Spacing Utilities
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+.ml-xs { margin-left: var(--spacing-xs); }
+.ml-sm { margin-left: var(--spacing-sm); }
+.ml-md { margin-left: var(--spacing-md); }
+.ml-lg { margin-left: var(--spacing-lg); }
+.ml-xl { margin-left: var(--spacing-xl); }
+
+.mr-xs { margin-right: var(--spacing-xs); }
+.mr-sm { margin-right: var(--spacing-sm); }
+.mr-md { margin-right: var(--spacing-md); }
+.mr-lg { margin-right: var(--spacing-lg); }
+.mr-xl { margin-right: var(--spacing-xl); }
+
+// Button Classes
+.btn-primary { @include button-primary; }
+.btn-secondary { @include button-secondary; }
+.btn-ghost { @include button-ghost; }
+
+// Card Classes
+.card {
+  @include card;
+  
+  &.card-sm {
+    @include card(var(--spacing-md), var(--radius-md));
+  }
+  
+  &.card-lg {
+    @include card(var(--spacing-xl), var(--radius-xl));
+  }
+}
+
+// Status Badge Classes
+.badge-success { @include status-badge('success'); }
+.badge-warning { @include status-badge('warning'); }
+.badge-error { @include status-badge('error'); }
+.badge-neutral { @include status-badge('neutral'); }
+
+// Input Classes
+.input {
+  @include input-base;
+}
+
+// Animation Classes
+.fade-in { @include fade-in; }
+.slide-up { @include slide-up; }
+
+// Layout Classes
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  
+  @include respond-to('lg') {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+.grid-responsive {
+  @include grid-responsive;
+}
+
+// Angular Material Overrides
+.mat-toolbar {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.mat-sidenav {
+  background: var(--bg-primary) !important;
+  border-right: 1px solid var(--border-light);
+  width: 280px !important;
+}
+
+.mat-sidenav-content {
+  background: var(--bg-secondary) !important;
+}
+
+.mat-list-item {
+  color: var(--text-secondary) !important;
+  
+  &:hover {
+    background: var(--secondary-50) !important;
+  }
+  
+  &.active {
+    background: var(--primary-50) !important;
+    color: var(--primary-700) !important;
+    border-right: 3px solid var(--primary-500);
+  }
+}
+
+.mat-card {
+  @include card;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.mat-button, .mat-raised-button, .mat-flat-button {
+  font-family: var(--font-family-primary) !important;
+  font-weight: var(--font-weight-medium) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.mat-form-field {
+  .mat-form-field-outline {
+    color: var(--border-light) !important;
+  }
+  
+  &.mat-focused .mat-form-field-outline {
+    color: var(--primary-500) !important;
+  }
+  
+  .mat-form-field-label {
+    color: var(--text-secondary) !important;
+  }
+  
+  &.mat-focused .mat-form-field-label {
+    color: var(--primary-500) !important;
+  }
+}
+
+.mat-table {
+  background: var(--bg-primary) !important;
+  
+  .mat-header-cell {
+    color: var(--text-secondary) !important;
+    font-weight: var(--font-weight-semibold) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+  }
+  
+  .mat-cell {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+  }
+  
+  .mat-row:hover {
+    background: var(--secondary-50) !important;
+  }
+}
+
+// Custom Scrollbar for Material Components
+.mat-sidenav, .mat-drawer-content, .mat-table-container {
+  @include custom-scrollbar;
+}
+
+// Responsive Design
+@include respond-to('sm') {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+@include respond-to('md') {
+  .grid-responsive {
+    @include grid-responsive(320px);
+  }
+}
+
+@include respond-to('lg') {
+  .grid-responsive {
+    @include grid-responsive(360px);
+  }
+}

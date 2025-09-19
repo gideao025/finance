@@ -1,0 +1,366 @@
+@import '../../styles/_variables';
+@import '../../styles/_mixins';
+
+.vouchers-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // Page Header
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+
+    .header-content {
+      .page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 0 0 8px 0;
+      }
+
+      .page-subtitle {
+        font-size: 1rem;
+        color: $text-secondary;
+        margin: 0;
+      }
+    }
+
+    .header-actions {
+      .add-voucher-btn {
+        @include button-primary;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+
+  // Filters Section
+  .filters-section {
+    margin-bottom: 24px;
+
+    .filters-card {
+      padding: 20px;
+      border-radius: $border-radius-lg;
+      box-shadow: $shadow-sm;
+
+      .filters-form {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .filter-field {
+          min-width: 200px;
+          flex: 1;
+
+          &:first-child {
+            flex: 2;
+          }
+        }
+
+        .clear-filters-btn {
+          color: $text-secondary;
+          
+          &:hover {
+            color: $primary;
+            background-color: rgba($primary, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  // Vouchers Grid
+  .vouchers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+
+    .voucher-card {
+      padding: 24px;
+      border-radius: $border-radius-lg;
+      box-shadow: $shadow-sm;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
+
+      &:hover {
+        box-shadow: $shadow-md;
+        transform: translateY(-2px);
+      }
+
+      // Status-based styling
+      &.status-ativo {
+        border-left-color: $success;
+      }
+
+      &.status-usado {
+        border-left-color: $warning;
+        opacity: 0.8;
+      }
+
+      &.status-expirado {
+        border-left-color: $error;
+        opacity: 0.6;
+      }
+
+      // Voucher Header
+      .voucher-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+
+        .voucher-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: $border-radius-md;
+          background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.2));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $primary;
+          flex-shrink: 0;
+        }
+
+        .voucher-info {
+          flex: 1;
+
+          .voucher-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin: 0 0 4px 0;
+          }
+
+          .voucher-company {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin: 0;
+          }
+        }
+
+        .voucher-menu-btn {
+          color: $text-secondary;
+          
+          &:hover {
+            color: $text-primary;
+            background-color: rgba($text-primary, 0.1);
+          }
+        }
+      }
+
+      // Voucher Content
+      .voucher-content {
+        margin-bottom: 20px;
+
+        .voucher-value,
+        .voucher-balance,
+        .voucher-expiry {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 12px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        .value-label,
+        .balance-label,
+        .expiry-label {
+          font-size: 0.875rem;
+          color: $text-secondary;
+        }
+
+        .value-amount {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: $success;
+        }
+
+        .balance-amount {
+          font-size: 1.1rem;
+          font-weight: 500;
+          color: $primary;
+        }
+
+        .expiry-date {
+          font-size: 0.875rem;
+          font-weight: 500;
+
+          &.expiring-soon {
+            color: $warning;
+          }
+
+          &.expired {
+            color: $error;
+          }
+
+          &.valid {
+            color: $success;
+          }
+        }
+      }
+
+      // Voucher Status
+      .voucher-status {
+        margin-bottom: 16px;
+
+        .status-chip-ativo {
+          background-color: rgba($success, 0.1);
+          color: $success;
+        }
+
+        .status-chip-usado {
+          background-color: rgba($warning, 0.1);
+          color: $warning;
+        }
+
+        .status-chip-expirado {
+          background-color: rgba($error, 0.1);
+          color: $error;
+        }
+      }
+
+      // Usage History
+      .voucher-usage {
+        border-top: 1px solid $border-light;
+        padding-top: 16px;
+
+        .usage-title {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0 0 12px 0;
+        }
+
+        .usage-list {
+          .usage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba($border-light, 0.5);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            .usage-amount {
+              font-weight: 500;
+              color: $text-primary;
+            }
+
+            .usage-date {
+              font-size: 0.75rem;
+              color: $text-secondary;
+            }
+
+            .usage-location {
+              font-size: 0.75rem;
+              color: $text-secondary;
+              max-width: 100px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Empty State
+  .empty-state {
+    text-align: center;
+    padding: 64px 24px;
+
+    .empty-icon {
+      color: $text-secondary;
+      margin-bottom: 24px;
+    }
+
+    .empty-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 12px 0;
+    }
+
+    .empty-message {
+      font-size: 1rem;
+      color: $text-secondary;
+      margin: 0 0 32px 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .empty-action-btn {
+      @include button-primary;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  // Loading State
+  .loading-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: $text-secondary;
+
+    mat-spinner {
+      margin: 0 auto 24px auto;
+    }
+  }
+
+  // Menu Actions
+  .delete-action {
+    color: $error !important;
+  }
+
+  // Responsive Design
+  @include mobile {
+    padding: 16px;
+
+    .page-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      .header-actions {
+        align-self: flex-start;
+      }
+    }
+
+    .filters-section {
+      .filters-form {
+        flex-direction: column;
+        align-items: stretch;
+
+        .filter-field {
+          min-width: unset;
+          flex: none;
+        }
+      }
+    }
+
+    .vouchers-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  @include tablet {
+    .vouchers-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+}

@@ -1,0 +1,88 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="'navigation'"
+               [mode]="isMobile ? 'over' : 'side'"
+               [opened]="sidenavOpened">
+    
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <div class="logo">
+        <lucide-icon name="CreditCard" [size]="32" class="logo-icon"></lucide-icon>
+        <span class="logo-text">Finance</span>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <mat-nav-list class="nav-menu">
+      <a mat-list-item 
+         *ngFor="let item of menuItems" 
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         class="nav-item">
+        <lucide-icon [name]="item.icon" [size]="20" class="nav-icon"></lucide-icon>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </mat-nav-list>
+
+    <!-- User Section -->
+    <div class="user-section">
+      <div class="user-info">
+        <div class="user-avatar">
+          <lucide-icon name="User" [size]="20"></lucide-icon>
+        </div>
+        <div class="user-details">
+          <span class="user-name">João Silva</span>
+          <span class="user-email">joao&#64;email.com</span>
+        </div>
+      </div>
+      <button mat-icon-button class="settings-btn">
+        <lucide-icon name="Settings" [size]="20"></lucide-icon>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content class="main-content">
+    <!-- Top Header -->
+    <mat-toolbar class="header">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="toggleSidenav()"
+        class="menu-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Buscar transações, cartões..." />
+        </mat-form-field>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button mat-icon-button class="notification-btn">
+          <lucide-icon name="Bell" [size]="20"></lucide-icon>
+          <span class="notification-badge">3</span>
+        </button>
+        
+        <button mat-button class="user-menu-btn">
+          <div class="user-avatar-small">
+            <lucide-icon name="User" [size]="16"></lucide-icon>
+          </div>
+          <span>João Silva</span>
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

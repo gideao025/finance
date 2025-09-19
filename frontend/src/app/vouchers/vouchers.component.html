@@ -1,0 +1,159 @@
+<div class="vouchers-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Vales</h1>
+      <p class="page-subtitle">Gerencie seus vales e benefícios</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" class="add-voucher-btn">
+        <lucide-icon name="Plus" [size]="16"></lucide-icon>
+        Novo Vale
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <mat-card class="filters-card">
+      <form [formGroup]="filterForm" class="filters-form">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Buscar</mat-label>
+          <input matInput formControlName="search" placeholder="Nome do vale ou empresa">
+          <lucide-icon matPrefix name="Search" [size]="16"></lucide-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Categoria</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="">Todas</mat-option>
+            <mat-option value="alimentacao">Alimentação</mat-option>
+            <mat-option value="transporte">Transporte</mat-option>
+            <mat-option value="combustivel">Combustível</mat-option>
+            <mat-option value="cultura">Cultura</mat-option>
+            <mat-option value="saude">Saúde</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="ativo">Ativo</mat-option>
+            <mat-option value="usado">Usado</mat-option>
+            <mat-option value="expirado">Expirado</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button type="button" class="clear-filters-btn" (click)="clearFilters()">
+          <lucide-icon name="Filter" [size]="16"></lucide-icon>
+        </button>
+      </form>
+    </mat-card>
+  </div>
+
+  <!-- Vouchers Grid -->
+  <div class="vouchers-grid" *ngIf="filteredVouchers.length > 0">
+    <mat-card 
+      *ngFor="let voucher of filteredVouchers; trackBy: trackByVoucherId" 
+      class="voucher-card"
+      [ngClass]="'status-' + voucher.status">
+      
+      <!-- Voucher Header -->
+      <div class="voucher-header">
+        <div class="voucher-icon">
+          <lucide-icon [name]="getCategoryIcon(voucher.category)" [size]="24"></lucide-icon>
+        </div>
+        <div class="voucher-info">
+          <h3 class="voucher-name">{{ voucher.name }}</h3>
+          <p class="voucher-company">{{ voucher.company }}</p>
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="voucherMenu" class="voucher-menu-btn">
+          <lucide-icon name="MoreVertical" [size]="16"></lucide-icon>
+        </button>
+        <mat-menu #voucherMenu="matMenu">
+          <button mat-menu-item (click)="viewVoucher(voucher)">
+            <lucide-icon name="Eye" [size]="16"></lucide-icon>
+            <span>Visualizar</span>
+          </button>
+          <button mat-menu-item (click)="useVoucher(voucher)" [disabled]="voucher.status !== 'active'">
+            <lucide-icon name="Zap" [size]="16"></lucide-icon>
+            <span>Usar</span>
+          </button>
+          <button mat-menu-item (click)="editVoucher(voucher)">
+            <lucide-icon name="Edit" [size]="16"></lucide-icon>
+            <span>Editar</span>
+          </button>
+          <button mat-menu-item (click)="deleteVoucher(voucher)" class="delete-action">
+            <lucide-icon name="Trash2" [size]="16"></lucide-icon>
+            <span>Excluir</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Voucher Content -->
+      <div class="voucher-content">
+        <div class="voucher-value">
+          <span class="value-label">Valor</span>
+          <span class="value-amount">{{ formatCurrency(voucher.value) }}</span>
+        </div>
+        
+        <div class="voucher-balance" *ngIf="voucher.balance !== voucher.value">
+          <span class="balance-label">Saldo</span>
+          <span class="balance-amount">{{ formatCurrency(voucher.balance) }}</span>
+        </div>
+
+        <div class="voucher-expiry">
+          <span class="expiry-label">Validade</span>
+          <span class="expiry-date" [ngClass]="getExpiryStatus(voucher.expiryDate)">
+            {{ formatDate(voucher.expiryDate) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Voucher Status -->
+      <div class="voucher-status">
+        <mat-chip [ngClass]="'status-chip-' + voucher.status">
+          {{ getStatusLabel(voucher.status) }}
+        </mat-chip>
+      </div>
+
+      <!-- Usage History (if any) -->
+      <div class="voucher-usage" *ngIf="voucher.usage && voucher.usage.length > 0">
+        <h4 class="usage-title">Últimas utilizações</h4>
+        <div class="usage-list">
+          <div 
+            *ngFor="let usage of voucher.usage.slice(0, 3)" 
+            class="usage-item">
+            <span class="usage-amount">{{ formatCurrency(usage.amount) }}</span>
+            <span class="usage-date">{{ formatDate(usage.date) }}</span>
+            <span class="usage-location">{{ usage.location }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredVouchers.length === 0">
+    <div class="empty-icon">
+      <lucide-icon name="Gift" [size]="64"></lucide-icon>
+    </div>
+    <h3 class="empty-title">Nenhum vale encontrado</h3>
+    <p class="empty-message">
+      {{ vouchers.length === 0 ? 
+         'Você ainda não possui vales cadastrados.' : 
+         'Nenhum vale corresponde aos filtros aplicados.' }}
+    </p>
+    <button mat-raised-button color="primary" class="empty-action-btn" *ngIf="vouchers.length === 0">
+      <lucide-icon name="Plus" [size]="16"></lucide-icon>
+      Adicionar Primeiro Vale
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Carregando vales...</p>
+  </div>
+</div>

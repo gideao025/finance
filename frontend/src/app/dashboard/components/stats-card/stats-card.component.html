@@ -1,0 +1,18 @@
+<mat-card [class]="cardClass">
+  <mat-card-content>
+    <div class="stats-header">
+      <div class="stats-icon">
+        <lucide-icon [name]="icon"></lucide-icon>
+      </div>
+      <div class="stats-change" [class]="changeClass">
+        <lucide-icon [name]="changeIcon"></lucide-icon>
+        <span>{{ change }}</span>
+      </div>
+    </div>
+    
+    <div class="stats-content">
+      <h3 class="stats-value">{{ value }}</h3>
+      <p class="stats-title">{{ title }}</p>
+    </div>
+  </mat-card-content>
+</mat-card>

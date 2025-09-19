@@ -1,0 +1,727 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.cards-page {
+  @include flex-column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+  background: var(--bg-primary);
+
+  .page-header {
+    .header-content {
+      @include flex-between;
+      align-items: flex-start;
+      gap: var(--spacing-lg);
+
+      .header-text {
+        h1 {
+          @include heading-1;
+          color: var(--text-primary);
+          margin: 0 0 var(--spacing-xs) 0;
+        }
+
+        p {
+          @include body-text;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+
+      .header-actions {
+        @include flex-start;
+        gap: var(--spacing-md);
+
+        button {
+          @include flex-center;
+          gap: var(--spacing-sm);
+
+          lucide-icon {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+
+    .card-item {
+      @include flex-column;
+      gap: var(--spacing-md);
+
+      .credit-card {
+        position: relative;
+        background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+        color: white;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        min-height: 200px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+          pointer-events: none;
+        }
+
+        mat-card-content {
+          position: relative;
+          z-index: 1;
+          padding: var(--spacing-lg);
+          height: 100%;
+          @include flex-column;
+          justify-content: space-between;
+
+          .card-header {
+            @include flex-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+
+            .card-info {
+              @include flex-column;
+              gap: var(--spacing-sm);
+
+              .card-type {
+                @include flex-start;
+                gap: var(--spacing-xs);
+                align-items: center;
+                @include small-text;
+                font-weight: var(--font-weight-medium);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                opacity: 0.9;
+
+                lucide-icon {
+                  width: 14px;
+                  height: 14px;
+                }
+              }
+
+              .virtual-chip {
+                background: rgba(255,255,255,0.2);
+                color: white;
+                font-size: var(--font-size-xs);
+                height: 20px;
+                border: 1px solid rgba(255,255,255,0.3);
+              }
+            }
+
+            .card-brand {
+              lucide-icon {
+                width: 32px;
+                height: 32px;
+                opacity: 0.8;
+              }
+            }
+          }
+
+          .card-number {
+            font-family: 'Courier New', monospace;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-md);
+          }
+
+          .card-name {
+            @include body-text;
+            font-weight: var(--font-weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+          }
+
+          .card-status {
+            .status-active {
+              background: rgba(76, 175, 80, 0.2);
+              color: #4caf50;
+              border: 1px solid rgba(76, 175, 80, 0.3);
+            }
+
+            .status-blocked {
+              background: rgba(255, 152, 0, 0.2);
+              color: #ff9800;
+              border: 1px solid rgba(255, 152, 0, 0.3);
+            }
+
+            .status-cancelled {
+              background: rgba(244, 67, 54, 0.2);
+              color: #f44336;
+              border: 1px solid rgba(244, 67, 54, 0.3);
+            }
+          }
+        }
+
+        mat-card-actions {
+          position: absolute;
+          top: var(--spacing-md);
+          right: var(--spacing-md);
+          z-index: 2;
+          padding: 0;
+
+          .card-menu-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+
+            &:hover {
+              background: rgba(255,255,255,0.2);
+            }
+
+            lucide-icon {
+              width: 18px;
+              height: 18px;
+            }
+          }
+        }
+      }
+
+      .card-details {
+        @include card-style;
+
+        mat-card-content {
+          padding: var(--spacing-lg);
+
+          .details-grid {
+            @include flex-column;
+            gap: var(--spacing-lg);
+
+            .detail-item {
+              @include flex-between;
+              align-items: center;
+              padding: var(--spacing-sm) 0;
+              border-bottom: 1px solid var(--border-light);
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              .detail-label {
+                @include small-text;
+                color: var(--text-secondary);
+                font-weight: var(--font-weight-medium);
+              }
+
+              .detail-value {
+                @include body-text;
+                font-weight: var(--font-weight-bold);
+                color: var(--text-primary);
+
+                &.available {
+                  color: var(--success-600);
+                }
+
+                &.negative {
+                  color: var(--error-600);
+                }
+
+                &.warning {
+                  color: var(--warning-600);
+                }
+
+                &.neutral {
+                  color: var(--text-primary);
+                }
+
+                small {
+                  @include small-text;
+                  font-weight: var(--font-weight-normal);
+                  color: var(--text-secondary);
+                  margin-left: var(--spacing-xs);
+                }
+              }
+            }
+
+            .usage-progress {
+              @include flex-column;
+              gap: var(--spacing-sm);
+              margin-top: var(--spacing-md);
+
+              .progress-header {
+                @include flex-between;
+                align-items: center;
+
+                .progress-label {
+                  @include small-text;
+                  color: var(--text-secondary);
+                  font-weight: var(--font-weight-medium);
+                }
+
+                .progress-percentage {
+                  @include small-text;
+                  font-weight: var(--font-weight-bold);
+                  color: var(--text-primary);
+                }
+              }
+
+              mat-progress-bar {
+                height: 8px;
+                border-radius: var(--radius-sm);
+
+                &.normal-usage {
+                  ::ng-deep .mat-progress-bar-fill::after {
+                    background: var(--success-500);
+                  }
+                }
+
+                &.high-usage {
+                  ::ng-deep .mat-progress-bar-fill::after {
+                    background: var(--warning-500);
+                  }
+                }
+
+                ::ng-deep .mat-progress-bar-buffer {
+                  background: var(--secondary-100);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .tabs-card {
+    @include card-style;
+
+    ::ng-deep .mat-tab-group {
+      .mat-tab-header {
+        border-bottom: 1px solid var(--border-light);
+
+        .mat-tab-label {
+          @include body-text;
+          font-weight: var(--font-weight-medium);
+          color: var(--text-secondary);
+
+          &.mat-tab-label-active {
+            color: var(--primary-500);
+          }
+        }
+      }
+
+      .mat-tab-body-wrapper {
+        .tab-content {
+          padding: var(--spacing-lg);
+
+          .transactions-list {
+            @include flex-column;
+            gap: var(--spacing-md);
+
+            .transaction-item {
+              @include flex-start;
+              gap: var(--spacing-md);
+              padding: var(--spacing-md);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-md);
+              background: var(--bg-secondary);
+              transition: var(--transition-fast);
+
+              &:hover {
+                border-color: var(--border-medium);
+                box-shadow: var(--shadow-sm);
+              }
+
+              .transaction-icon {
+                @include flex-center;
+                width: 40px;
+                height: 40px;
+                border-radius: var(--radius-md);
+                background: var(--primary-50);
+                flex-shrink: 0;
+
+                lucide-icon {
+                  width: 20px;
+                  height: 20px;
+                  color: var(--primary-500);
+                }
+              }
+
+              .transaction-details {
+                flex: 1;
+                @include flex-column;
+                gap: var(--spacing-xs);
+
+                .transaction-header {
+                  @include flex-between;
+                  align-items: center;
+
+                  .transaction-description {
+                    @include body-text;
+                    font-weight: var(--font-weight-medium);
+                    color: var(--text-primary);
+                  }
+
+                  .transaction-amount {
+                    @include body-text;
+                    font-weight: var(--font-weight-bold);
+
+                    &.negative {
+                      color: var(--error-600);
+                    }
+
+                    &.positive {
+                      color: var(--success-600);
+                    }
+                  }
+                }
+
+                .transaction-meta {
+                  @include flex-start;
+                  gap: var(--spacing-md);
+                  align-items: center;
+                  flex-wrap: wrap;
+
+                  .transaction-card,
+                  .transaction-date {
+                    @include small-text;
+                    color: var(--text-secondary);
+                  }
+
+                  .transaction-status {
+                    font-size: var(--font-size-xs);
+                    height: 20px;
+
+                    &.status-processed {
+                      background: var(--success-50);
+                      color: var(--success-700);
+                    }
+
+                    &.status-pending {
+                      background: var(--warning-50);
+                      color: var(--warning-700);
+                    }
+                  }
+                }
+
+                .transaction-installments {
+                  .installments-info {
+                    @include small-text;
+                    color: var(--text-tertiary);
+                    font-style: italic;
+                  }
+                }
+              }
+            }
+
+            .empty-state {
+              @include flex-center;
+              @include flex-column;
+              gap: var(--spacing-md);
+              padding: var(--spacing-xl);
+              text-align: center;
+
+              lucide-icon {
+                width: 48px;
+                height: 48px;
+                color: var(--text-quaternary);
+              }
+
+              h3 {
+                @include heading-3;
+                color: var(--text-primary);
+                margin: 0;
+              }
+
+              p {
+                @include body-text;
+                color: var(--text-secondary);
+                margin: 0;
+              }
+            }
+          }
+
+          .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+
+            .benefit-item {
+              @include flex-start;
+              gap: var(--spacing-md);
+              padding: var(--spacing-lg);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-md);
+              background: var(--bg-secondary);
+
+              .benefit-icon {
+                @include flex-center;
+                width: 48px;
+                height: 48px;
+                border-radius: var(--radius-md);
+                background: var(--primary-50);
+                flex-shrink: 0;
+
+                lucide-icon {
+                  width: 24px;
+                  height: 24px;
+                  color: var(--primary-500);
+                }
+              }
+
+              .benefit-content {
+                h3 {
+                  @include heading-4;
+                  color: var(--text-primary);
+                  margin: 0 0 var(--spacing-xs) 0;
+                }
+
+                p {
+                  @include small-text;
+                  color: var(--text-secondary);
+                  margin: 0;
+                  line-height: 1.5;
+                }
+              }
+            }
+          }
+
+          .settings-list {
+            @include flex-column;
+            gap: var(--spacing-md);
+
+            .setting-item {
+              @include flex-between;
+              align-items: center;
+              gap: var(--spacing-lg);
+              padding: var(--spacing-lg);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-md);
+              background: var(--bg-secondary);
+
+              .setting-info {
+                flex: 1;
+
+                h3 {
+                  @include body-text;
+                  font-weight: var(--font-weight-medium);
+                  color: var(--text-primary);
+                  margin: 0 0 var(--spacing-xs) 0;
+                }
+
+                p {
+                  @include small-text;
+                  color: var(--text-secondary);
+                  margin: 0;
+                  line-height: 1.4;
+                }
+              }
+
+              button {
+                flex-shrink: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Card brand specific colors
+.card-item {
+  &[data-brand="visa"] .credit-card {
+    background: linear-gradient(135deg, #1a1f71, #0f4c75);
+  }
+
+  &[data-brand="mastercard"] .credit-card {
+    background: linear-gradient(135deg, #eb001b, #f79e1b);
+  }
+
+  &[data-brand="elo"] .credit-card {
+    background: linear-gradient(135deg, #ffcb05, #007bc7);
+  }
+
+  &[data-brand="american-express"] .credit-card {
+    background: linear-gradient(135deg, #006fcf, #012169);
+  }
+}
+
+// Card type specific styling
+.card-item {
+  &[data-type="debit"] .credit-card {
+    background: linear-gradient(135deg, var(--secondary-600), var(--secondary-800));
+  }
+}
+
+// Menu danger action
+::ng-deep .mat-menu-panel {
+  .danger-action {
+    color: var(--error-600);
+
+    lucide-icon {
+      color: var(--error-600);
+    }
+
+    &:hover {
+      background: var(--error-50);
+    }
+  }
+}
+
+// Responsive adjustments
+@include respond-to('lg') {
+  .cards-page {
+    .page-header {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-md);
+
+        .header-actions {
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include respond-to('md') {
+  .cards-page {
+    padding: var(--spacing-md);
+
+    .cards-grid {
+      gap: var(--spacing-md);
+
+      .card-item {
+        gap: var(--spacing-sm);
+
+        .credit-card {
+          min-height: 180px;
+
+          mat-card-content {
+            padding: var(--spacing-md);
+
+            .card-number {
+              font-size: var(--font-size-md);
+            }
+          }
+        }
+
+        .card-details {
+          mat-card-content {
+            padding: var(--spacing-md);
+          }
+        }
+      }
+    }
+
+    .tabs-card {
+      ::ng-deep .mat-tab-group {
+        .mat-tab-body-wrapper {
+          .tab-content {
+            padding: var(--spacing-md);
+
+            .benefits-grid {
+              grid-template-columns: 1fr;
+              gap: var(--spacing-md);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond-to('sm') {
+  .cards-page {
+    padding: var(--spacing-sm);
+
+    .page-header {
+      .header-content {
+        .header-actions {
+          flex-direction: column;
+          width: 100%;
+
+          button {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+
+      .card-item {
+        .credit-card {
+          min-height: 160px;
+
+          mat-card-content {
+            .card-header {
+              .card-brand {
+                lucide-icon {
+                  width: 24px;
+                  height: 24px;
+                }
+              }
+            }
+
+            .card-number {
+              font-size: var(--font-size-sm);
+              letter-spacing: 1px;
+            }
+          }
+        }
+      }
+    }
+
+    .tabs-card {
+      ::ng-deep .mat-tab-group {
+        .mat-tab-body-wrapper {
+          .tab-content {
+            .transactions-list {
+              .transaction-item {
+                padding: var(--spacing-sm);
+
+                .transaction-icon {
+                  width: 32px;
+                  height: 32px;
+
+                  lucide-icon {
+                    width: 16px;
+                    height: 16px;
+                  }
+                }
+
+                .transaction-details {
+                  .transaction-meta {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: var(--spacing-xs);
+                  }
+                }
+              }
+            }
+
+            .settings-list {
+              .setting-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: var(--spacing-md);
+                text-align: center;
+
+                button {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

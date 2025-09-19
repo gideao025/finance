@@ -1,0 +1,256 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.transaction-list {
+  @include flex-column;
+  gap: var(--spacing-sm);
+  
+  .transaction-item {
+    @include flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    background: var(--bg-primary);
+    transition: var(--transition-fast);
+    
+    &:hover {
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .transaction-icon {
+      @include flex-center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--secondary-50);
+      flex-shrink: 0;
+      
+      lucide-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--text-secondary);
+      }
+    }
+    
+    .transaction-details {
+      flex: 1;
+      @include flex-column;
+      gap: var(--spacing-xs);
+      
+      .transaction-main {
+        @include flex-between;
+        align-items: flex-start;
+        
+        .transaction-description {
+          @include body-text;
+          font-weight: var(--font-weight-medium);
+          color: var(--text-primary);
+          margin: 0;
+          flex: 1;
+        }
+        
+        .transaction-amount {
+          @include body-text;
+          font-weight: var(--font-weight-bold);
+          white-space: nowrap;
+          margin-left: var(--spacing-md);
+          
+          &.amount-positive {
+            color: var(--success-600);
+          }
+          
+          &.amount-negative {
+            color: var(--error-600);
+          }
+        }
+      }
+      
+      .transaction-meta {
+        @include flex-start;
+        gap: var(--spacing-md);
+        align-items: center;
+        
+        .transaction-category {
+          @include small-text;
+          color: var(--text-secondary);
+          font-weight: var(--font-weight-medium);
+        }
+        
+        .transaction-date {
+          @include small-text;
+          color: var(--text-tertiary);
+        }
+        
+        .transaction-status {
+          font-size: var(--font-size-xs);
+          height: 20px;
+          line-height: 20px;
+          
+          &.mat-chip-success {
+            background: var(--success-50);
+            color: var(--success-700);
+          }
+          
+          &.mat-chip-warning {
+            background: var(--warning-50);
+            color: var(--warning-700);
+          }
+        }
+      }
+    }
+    
+    .transaction-actions {
+      flex-shrink: 0;
+      
+      button {
+        color: var(--text-tertiary);
+        
+        &:hover {
+          color: var(--text-secondary);
+          background: var(--secondary-50);
+        }
+        
+        lucide-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    @include flex-center;
+    @include flex-column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl);
+    color: var(--text-tertiary);
+    
+    lucide-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--text-quaternary);
+    }
+    
+    p {
+      @include body-text;
+      margin: 0;
+    }
+  }
+}
+
+// Category-specific icon colors
+.transaction-item {
+  &[data-category="Salário"] .transaction-icon {
+    background: var(--success-50);
+    lucide-icon { color: var(--success-500); }
+  }
+  
+  &[data-category="Freelance"] .transaction-icon {
+    background: var(--primary-50);
+    lucide-icon { color: var(--primary-500); }
+  }
+  
+  &[data-category="Alimentação"] .transaction-icon {
+    background: var(--warning-50);
+    lucide-icon { color: var(--warning-500); }
+  }
+  
+  &[data-category="Transporte"] .transaction-icon {
+    background: var(--info-50);
+    lucide-icon { color: var(--info-500); }
+  }
+  
+  &[data-category="Utilidades"] .transaction-icon {
+    background: var(--error-50);
+    lucide-icon { color: var(--error-500); }
+  }
+  
+  &[data-category="Lazer"] .transaction-icon {
+    background: var(--secondary-100);
+    lucide-icon { color: var(--secondary-600); }
+  }
+}
+
+// Responsive adjustments
+@include respond-to('sm') {
+  .transaction-list {
+    .transaction-item {
+      padding: var(--spacing-sm);
+      
+      .transaction-icon {
+        width: 32px;
+        height: 32px;
+        
+        lucide-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+      
+      .transaction-details {
+        .transaction-main {
+          @include flex-column;
+          align-items: flex-start;
+          gap: var(--spacing-xs);
+          
+          .transaction-amount {
+            margin-left: 0;
+          }
+        }
+        
+        .transaction-meta {
+          gap: var(--spacing-sm);
+          flex-wrap: wrap;
+          
+          .transaction-status {
+            font-size: 10px;
+            height: 18px;
+            line-height: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading state
+.transaction-list.loading {
+  .transaction-item {
+    .transaction-details {
+      .transaction-description,
+      .transaction-category,
+      .transaction-date {
+        background: var(--secondary-100);
+        border-radius: var(--radius-sm);
+        color: transparent;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      .transaction-description {
+        height: 20px;
+        width: 60%;
+      }
+      
+      .transaction-category {
+        height: 16px;
+        width: 40%;
+      }
+      
+      .transaction-date {
+        height: 16px;
+        width: 30%;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

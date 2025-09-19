@@ -1,0 +1,54 @@
+<div class="transaction-list">
+  <div 
+    *ngFor="let transaction of transactions; trackBy: trackByTransactionId" 
+    class="transaction-item">
+    
+    <div class="transaction-icon">
+      <lucide-icon [name]="getTransactionIcon(transaction.category)"></lucide-icon>
+    </div>
+    
+    <div class="transaction-details">
+      <div class="transaction-main">
+        <h4 class="transaction-description">{{ transaction.description }}</h4>
+        <span class="transaction-amount" [class]="getAmountClass(transaction.type)">
+          {{ transaction.type === 'expense' ? '-' : '+' }}{{ formatCurrency(transaction.amount) }}
+        </span>
+      </div>
+      
+      <div class="transaction-meta">
+        <span class="transaction-category">{{ transaction.category }}</span>
+        <span class="transaction-date">{{ formatDate(transaction.date) }}</span>
+        <mat-chip 
+          class="transaction-status" 
+          [color]="getStatusColor(transaction.status)">
+          {{ getStatusText(transaction.status) }}
+        </mat-chip>
+      </div>
+    </div>
+    
+    <div class="transaction-actions">
+      <button mat-icon-button [matMenuTriggerFor]="transactionMenu">
+        <lucide-icon name="MoreVertical"></lucide-icon>
+      </button>
+      <mat-menu #transactionMenu="matMenu">
+        <button mat-menu-item>
+          <lucide-icon name="Eye"></lucide-icon>
+          Ver detalhes
+        </button>
+        <button mat-menu-item>
+          <lucide-icon name="Edit"></lucide-icon>
+          Editar
+        </button>
+        <button mat-menu-item>
+          <lucide-icon name="Trash2"></lucide-icon>
+          Excluir
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <div *ngIf="transactions.length === 0" class="empty-state">
+    <lucide-icon name="FileText"></lucide-icon>
+    <p>Nenhuma transação encontrada</p>
+  </div>
+</div>

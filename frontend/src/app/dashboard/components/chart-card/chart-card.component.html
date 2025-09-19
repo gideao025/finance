@@ -1,0 +1,27 @@
+<mat-card class="chart-card">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+    <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
+    <div class="card-actions">
+      <button mat-icon-button [matMenuTriggerFor]="chartMenu">
+        <lucide-icon name="MoreVertical"></lucide-icon>
+      </button>
+      <mat-menu #chartMenu="matMenu">
+        <button mat-menu-item>Exportar</button>
+        <button mat-menu-item>Configurar</button>
+        <button mat-menu-item>Atualizar</button>
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div class="chart-container">
+      <canvas 
+        baseChart
+        [data]="chartData"
+        [options]="chartOptions"
+        [type]="chartType">
+      </canvas>
+    </div>
+  </mat-card-content>
+</mat-card>

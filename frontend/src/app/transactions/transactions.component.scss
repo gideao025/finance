@@ -1,0 +1,482 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.transactions-page {
+  @include flex-column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+  background: var(--bg-primary);
+
+  .page-header {
+    .header-content {
+      @include flex-between;
+      align-items: flex-start;
+      gap: var(--spacing-lg);
+
+      .header-text {
+        h1 {
+          @include heading-1;
+          color: var(--text-primary);
+          margin: 0 0 var(--spacing-xs) 0;
+        }
+
+        p {
+          @include body-text;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+
+      .header-actions {
+        @include flex-start;
+        gap: var(--spacing-md);
+
+        button {
+          @include flex-center;
+          gap: var(--spacing-sm);
+
+          lucide-icon {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  .filters-card {
+    @include card-style;
+
+    mat-card-content {
+      padding: var(--spacing-lg);
+
+      .filters-form {
+        @include flex-column;
+        gap: var(--spacing-lg);
+
+        .filters-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: var(--spacing-md);
+          align-items: end;
+
+          .search-field {
+            grid-column: 1 / -1;
+            max-width: 400px;
+
+            ::ng-deep .mat-form-field-prefix {
+              color: var(--text-tertiary);
+            }
+          }
+
+          .clear-filters-btn {
+            @include flex-center;
+            gap: var(--spacing-sm);
+            height: 56px;
+
+            lucide-icon {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .transactions-table-card {
+    @include card-style;
+    flex: 1;
+
+    mat-card-content {
+      padding: 0;
+
+      .table-container {
+        overflow-x: auto;
+
+        .transactions-table {
+          width: 100%;
+          background: transparent;
+
+          th {
+            @include small-text;
+            font-weight: var(--font-weight-bold);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--spacing-lg) var(--spacing-md);
+          }
+
+          td {
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--spacing-lg) var(--spacing-md);
+
+            &:first-child {
+              padding-left: var(--spacing-lg);
+            }
+
+            &:last-child {
+              padding-right: var(--spacing-lg);
+            }
+          }
+
+          .transaction-description {
+            @include flex-start;
+            gap: var(--spacing-md);
+            align-items: center;
+
+            .transaction-icon {
+              @include flex-center;
+              width: 36px;
+              height: 36px;
+              border-radius: var(--radius-md);
+              background: var(--secondary-50);
+              flex-shrink: 0;
+
+              lucide-icon {
+                width: 18px;
+                height: 18px;
+                color: var(--secondary-600);
+              }
+            }
+
+            .transaction-details {
+              .transaction-title {
+                @include body-text;
+                font-weight: var(--font-weight-medium);
+                color: var(--text-primary);
+                margin-bottom: var(--spacing-xs);
+              }
+
+              .transaction-account {
+                @include small-text;
+                color: var(--text-secondary);
+              }
+            }
+          }
+
+          .transaction-tags {
+            margin-top: var(--spacing-xs);
+
+            .tag-chip {
+              font-size: var(--font-size-xs);
+              height: 20px;
+              background: var(--secondary-50);
+              color: var(--text-secondary);
+            }
+          }
+
+          .transaction-amount {
+            @include flex-end;
+            gap: var(--spacing-xs);
+            font-weight: var(--font-weight-bold);
+
+            &.amount-positive {
+              color: var(--success-600);
+
+              .amount-sign {
+                color: var(--success-500);
+              }
+            }
+
+            &.amount-negative {
+              color: var(--error-600);
+
+              .amount-sign {
+                color: var(--error-500);
+              }
+            }
+
+            .amount-sign {
+              font-size: var(--font-size-sm);
+            }
+
+            .amount-value {
+              font-size: var(--font-size-md);
+            }
+          }
+
+          // Status chips
+          .status-completed {
+            background: var(--success-50);
+            color: var(--success-700);
+          }
+
+          .status-pending {
+            background: var(--warning-50);
+            color: var(--warning-700);
+          }
+
+          .status-cancelled {
+            background: var(--error-50);
+            color: var(--error-700);
+          }
+        }
+
+        .empty-state {
+          @include flex-center;
+          @include flex-column;
+          gap: var(--spacing-lg);
+          padding: var(--spacing-xl) var(--spacing-lg);
+          text-align: center;
+
+          lucide-icon {
+            width: 64px;
+            height: 64px;
+            color: var(--text-quaternary);
+          }
+
+          h3 {
+            @include heading-3;
+            color: var(--text-primary);
+            margin: 0;
+          }
+
+          p {
+            @include body-text;
+            color: var(--text-secondary);
+            margin: 0;
+            max-width: 400px;
+          }
+
+          button {
+            @include flex-center;
+            gap: var(--spacing-sm);
+
+            lucide-icon {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+
+      mat-paginator {
+        border-top: 1px solid var(--border-light);
+        background: var(--bg-secondary);
+      }
+    }
+  }
+}
+
+// Category-specific icon colors
+.transaction-icon {
+  &[data-category="Alimentação"] {
+    background: var(--success-50);
+    lucide-icon { color: var(--success-500); }
+  }
+
+  &[data-category="Transporte"] {
+    background: var(--info-50);
+    lucide-icon { color: var(--info-500); }
+  }
+
+  &[data-category="Entretenimento"] {
+    background: var(--warning-50);
+    lucide-icon { color: var(--warning-500); }
+  }
+
+  &[data-category="Saúde"] {
+    background: var(--error-50);
+    lucide-icon { color: var(--error-500); }
+  }
+
+  &[data-category="Educação"] {
+    background: var(--primary-50);
+    lucide-icon { color: var(--primary-500); }
+  }
+
+  &[data-category="Salário"] {
+    background: var(--success-50);
+    lucide-icon { color: var(--success-500); }
+  }
+
+  &[data-category="Freelance"] {
+    background: var(--secondary-100);
+    lucide-icon { color: var(--secondary-600); }
+  }
+
+  &[data-category="Investimentos"] {
+    background: var(--primary-50);
+    lucide-icon { color: var(--primary-500); }
+  }
+}
+
+// Responsive adjustments
+@include respond-to('lg') {
+  .transactions-page {
+    .page-header {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-md);
+
+        .header-actions {
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    .filters-card {
+      mat-card-content {
+        .filters-form {
+          .filters-row {
+            grid-template-columns: 1fr;
+
+            .search-field {
+              grid-column: 1;
+              max-width: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond-to('md') {
+  .transactions-page {
+    padding: var(--spacing-md);
+
+    .transactions-table-card {
+      mat-card-content {
+        .table-container {
+          .transactions-table {
+            th, td {
+              padding: var(--spacing-md) var(--spacing-sm);
+
+              &:first-child {
+                padding-left: var(--spacing-md);
+              }
+
+              &:last-child {
+                padding-right: var(--spacing-md);
+              }
+            }
+
+            .transaction-description {
+              gap: var(--spacing-sm);
+
+              .transaction-icon {
+                width: 32px;
+                height: 32px;
+
+                lucide-icon {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+
+              .transaction-details {
+                .transaction-title {
+                  font-size: var(--font-size-sm);
+                }
+
+                .transaction-account {
+                  font-size: var(--font-size-xs);
+                }
+              }
+            }
+
+            .transaction-amount {
+              .amount-value {
+                font-size: var(--font-size-sm);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond-to('sm') {
+  .transactions-page {
+    padding: var(--spacing-sm);
+
+    .page-header {
+      .header-content {
+        .header-actions {
+          flex-direction: column;
+          width: 100%;
+
+          button {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .transactions-table-card {
+      mat-card-content {
+        .table-container {
+          .empty-state {
+            padding: var(--spacing-lg) var(--spacing-md);
+
+            lucide-icon {
+              width: 48px;
+              height: 48px;
+            }
+
+            h3 {
+              font-size: var(--font-size-lg);
+            }
+
+            p {
+              font-size: var(--font-size-sm);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading states
+.transactions-table.loading {
+  .transaction-description {
+    .transaction-details {
+      .transaction-title,
+      .transaction-account {
+        background: var(--secondary-100);
+        border-radius: var(--radius-sm);
+        color: transparent;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      .transaction-title {
+        height: 20px;
+        width: 70%;
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .transaction-account {
+        height: 16px;
+        width: 50%;
+      }
+    }
+  }
+
+  .transaction-amount {
+    .amount-value {
+      background: var(--secondary-100);
+      border-radius: var(--radius-sm);
+      color: transparent;
+      animation: pulse 1.5s ease-in-out infinite;
+      height: 20px;
+      width: 80px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

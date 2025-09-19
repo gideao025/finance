@@ -1,0 +1,136 @@
+<div class="dashboard-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Visão geral das suas finanças</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" class="add-transaction-btn">
+        <lucide-icon name="Plus"></lucide-icon>
+        Nova Transação
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <app-stats-card 
+      *ngFor="let stat of statsData"
+      [title]="stat.title"
+      [value]="stat.value"
+      [change]="stat.change"
+      [changeType]="stat.changeType"
+      [icon]="stat.icon"
+      [color]="stat.color">
+    </app-stats-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <!-- Income vs Expense Chart -->
+      <app-chart-card
+        title="Receitas vs Despesas"
+        subtitle="Últimos 6 meses"
+        [chartData]="incomeVsExpenseData"
+        [chartOptions]="chartOptions"
+        chartType="line"
+        class="income-expense-chart">
+      </app-chart-card>
+
+      <!-- Expense Categories Chart -->
+      <app-chart-card
+        title="Despesas por Categoria"
+        subtitle="Este mês"
+        [chartData]="expenseChartData"
+        [chartOptions]="doughnutOptions"
+        chartType="doughnut"
+        class="expense-categories-chart">
+      </app-chart-card>
+    </div>
+
+    <!-- Side Content -->
+    <div class="side-content">
+      <!-- Recent Transactions -->
+      <mat-card class="transactions-card">
+        <mat-card-header>
+          <mat-card-title>Transações Recentes</mat-card-title>
+          <mat-card-subtitle>Últimas 5 transações</mat-card-subtitle>
+          <div class="card-actions">
+            <button mat-icon-button [matMenuTriggerFor]="transactionsMenu">
+              <lucide-icon name="MoreVertical"></lucide-icon>
+            </button>
+            <mat-menu #transactionsMenu="matMenu">
+              <button mat-menu-item>Ver todas</button>
+              <button mat-menu-item>Exportar</button>
+              <button mat-menu-item>Filtrar</button>
+            </mat-menu>
+          </div>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <app-transaction-list [transactions]="recentTransactions"></app-transaction-list>
+        </mat-card-content>
+        
+        <mat-card-actions align="end">
+          <button mat-button color="primary" routerLink="/transactions">
+            Ver todas as transações
+            <lucide-icon name="ArrowUpRight"></lucide-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Goals Card -->
+      <app-goals-card 
+        title="Metas Financeiras"
+        subtitle="Progresso das suas metas"
+        [goals]="goals">
+      </app-goals-card>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <mat-card class="quick-actions-card">
+      <mat-card-header>
+        <mat-card-title>Ações Rápidas</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="actions-grid">
+          <button mat-stroked-button class="action-btn" routerLink="/transactions/new">
+            <lucide-icon name="Plus"></lucide-icon>
+            <span>Nova Transação</span>
+          </button>
+          
+          <button mat-stroked-button class="action-btn" routerLink="/cards">
+            <lucide-icon name="CreditCard"></lucide-icon>
+            <span>Gerenciar Cartões</span>
+          </button>
+          
+          <button mat-stroked-button class="action-btn" routerLink="/vouchers">
+            <lucide-icon name="Gift"></lucide-icon>
+            <span>Vales</span>
+          </button>
+          
+          <button mat-stroked-button class="action-btn" routerLink="/goals">
+            <lucide-icon name="Target"></lucide-icon>
+            <span>Metas</span>
+          </button>
+          
+          <button mat-stroked-button class="action-btn" routerLink="/reports">
+            <lucide-icon name="BarChart3"></lucide-icon>
+            <span>Relatórios</span>
+          </button>
+          
+          <button mat-stroked-button class="action-btn" routerLink="/settings">
+            <lucide-icon name="Settings"></lucide-icon>
+            <span>Configurações</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

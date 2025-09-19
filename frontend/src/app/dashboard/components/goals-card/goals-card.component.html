@@ -1,0 +1,72 @@
+<mat-card class="goals-card">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+    <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
+    <div class="card-actions">
+      <button mat-icon-button [matMenuTriggerFor]="goalsMenu">
+        <lucide-icon name="MoreVertical"></lucide-icon>
+      </button>
+      <mat-menu #goalsMenu="matMenu">
+        <button mat-menu-item>Nova meta</button>
+        <button mat-menu-item>Ver todas</button>
+        <button mat-menu-item>Configurar</button>
+      </mat-menu>
+    </div>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div class="goals-list">
+      <div 
+        *ngFor="let goal of goals; trackBy: trackByGoalId" 
+        class="goal-item">
+        
+        <div class="goal-header">
+          <div class="goal-icon">
+            <lucide-icon [name]="getCategoryIcon(goal.category)"></lucide-icon>
+          </div>
+          
+          <div class="goal-info">
+            <h4 class="goal-title">{{ goal.title }}</h4>
+            <span class="goal-category">{{ goal.category }}</span>
+          </div>
+          
+          <div class="goal-deadline" [class]="'deadline-' + getDeadlineStatus(getDaysUntilDeadline(goal.deadline))">
+            {{ getDaysUntilDeadline(goal.deadline) }} dias
+          </div>
+        </div>
+        
+        <div class="goal-progress">
+          <div class="progress-info">
+            <span class="progress-text">
+              {{ formatCurrency(goal.current) }} de {{ formatCurrency(goal.target) }}
+            </span>
+            <span class="progress-percentage">
+              {{ getGoalProgress(goal) }}%
+            </span>
+          </div>
+          
+          <mat-progress-bar 
+            [value]="getGoalProgress(goal)"
+            [color]="getProgressColor(getGoalProgress(goal))"
+            class="progress-bar">
+          </mat-progress-bar>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="goals.length === 0" class="empty-state">
+      <lucide-icon name="Target"></lucide-icon>
+      <p>Nenhuma meta definida</p>
+      <button mat-stroked-button color="primary">
+        Criar primeira meta
+      </button>
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions align="end" *ngIf="goals.length > 0">
+    <button mat-button color="primary" routerLink="/goals">
+      Ver todas as metas
+      <lucide-icon name="ArrowUpRight"></lucide-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

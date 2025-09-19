@@ -1,0 +1,312 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.dashboard-container {
+  @include flex-column;
+  gap: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Page Header
+.page-header {
+  @include flex-between;
+  gap: var(--spacing-lg);
+  
+  .header-content {
+    .page-title {
+      @include heading-1;
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-xs) 0;
+    }
+    
+    .page-subtitle {
+      @include body-text;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+  
+  .header-actions {
+    .add-transaction-btn {
+      @include flex-start;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-md) var(--spacing-lg);
+      
+      lucide-icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+// Main Content Grid
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-xl);
+  
+  .charts-section {
+    @include flex-column;
+    gap: var(--spacing-lg);
+    
+    .income-expense-chart {
+      min-height: 400px;
+    }
+    
+    .expense-categories-chart {
+      min-height: 350px;
+    }
+  }
+  
+  .side-content {
+    @include flex-column;
+    gap: var(--spacing-lg);
+  }
+}
+
+// Transactions Card
+.transactions-card {
+  @include card-style;
+  
+  mat-card-header {
+    @include flex-between;
+    align-items: flex-start;
+    
+    .mat-card-header-text {
+      flex: 1;
+      
+      mat-card-title {
+        @include heading-3;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-xs);
+      }
+      
+      mat-card-subtitle {
+        @include small-text;
+        color: var(--text-secondary);
+      }
+    }
+    
+    .card-actions {
+      button {
+        color: var(--text-tertiary);
+        
+        &:hover {
+          color: var(--text-secondary);
+          background: var(--secondary-50);
+        }
+      }
+    }
+  }
+  
+  mat-card-content {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  mat-card-actions {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-light);
+    
+    button {
+      @include flex-start;
+      gap: var(--spacing-sm);
+      
+      lucide-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+// Quick Actions
+.quick-actions {
+  .quick-actions-card {
+    @include card-style;
+    
+    mat-card-header {
+      mat-card-title {
+        @include heading-3;
+        color: var(--text-primary);
+      }
+    }
+    
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--spacing-md);
+      
+      .action-btn {
+        @include flex-column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-lg);
+        height: auto;
+        min-height: 80px;
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+        
+        &:hover {
+          border-color: var(--primary-300);
+          background: var(--primary-50);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
+        
+        lucide-icon {
+          width: 24px;
+          height: 24px;
+          color: var(--primary-500);
+        }
+        
+        span {
+          @include small-text;
+          font-weight: var(--font-weight-medium);
+          color: var(--text-primary);
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@include respond-to('lg') {
+  .content-grid {
+    grid-template-columns: 1fr;
+    
+    .charts-section {
+      order: 1;
+    }
+    
+    .side-content {
+      order: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
+    }
+  }
+}
+
+@include respond-to('md') {
+  .dashboard-container {
+    gap: var(--spacing-lg);
+  }
+  
+  .page-header {
+    @include flex-column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    
+    .header-actions {
+      width: 100%;
+      
+      .add-transaction-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  .content-grid {
+    .side-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .quick-actions {
+    .actions-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--spacing-sm);
+      
+      .action-btn {
+        min-height: 70px;
+        padding: var(--spacing-md);
+        
+        lucide-icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+@include respond-to('sm') {
+  .dashboard-container {
+    gap: var(--spacing-md);
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  .content-grid {
+    gap: var(--spacing-md);
+    
+    .charts-section {
+      gap: var(--spacing-md);
+    }
+    
+    .side-content {
+      gap: var(--spacing-md);
+    }
+  }
+  
+  .quick-actions {
+    .actions-grid {
+      grid-template-columns: repeat(2, 1fr);
+      
+      .action-btn {
+        min-height: 60px;
+        
+        span {
+          font-size: var(--font-size-xs);
+        }
+      }
+    }
+  }
+}
+
+// Animation for cards
+.stats-grid > *,
+.content-grid > *,
+.quick-actions-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Loading states
+.loading {
+  .stats-grid,
+  .content-grid,
+  .quick-actions {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}

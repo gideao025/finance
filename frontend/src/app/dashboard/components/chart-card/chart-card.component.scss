@@ -1,0 +1,121 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.chart-card {
+  @include card-style;
+  height: 100%;
+  
+  mat-card-header {
+    @include flex-between;
+    align-items: flex-start;
+    
+    .mat-card-header-text {
+      flex: 1;
+      
+      mat-card-title {
+        @include heading-3;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-xs);
+      }
+      
+      mat-card-subtitle {
+        @include small-text;
+        color: var(--text-secondary);
+      }
+    }
+    
+    .card-actions {
+      button {
+        color: var(--text-tertiary);
+        
+        &:hover {
+          color: var(--text-secondary);
+          background: var(--secondary-50);
+        }
+      }
+    }
+  }
+  
+  mat-card-content {
+    padding: var(--spacing-lg) 0 0 0;
+    flex: 1;
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+      
+      canvas {
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+// Specific chart heights
+.income-expense-chart .chart-container {
+  height: 350px;
+}
+
+.expense-categories-chart .chart-container {
+  height: 300px;
+}
+
+// Responsive adjustments
+@include respond-to('md') {
+  .chart-card {
+    mat-card-content {
+      .chart-container {
+        height: 250px;
+      }
+    }
+  }
+  
+  .income-expense-chart .chart-container {
+    height: 300px;
+  }
+  
+  .expense-categories-chart .chart-container {
+    height: 250px;
+  }
+}
+
+@include respond-to('sm') {
+  .chart-card {
+    mat-card-content {
+      .chart-container {
+        height: 200px;
+      }
+    }
+  }
+  
+  .income-expense-chart .chart-container,
+  .expense-categories-chart .chart-container {
+    height: 200px;
+  }
+}
+
+// Loading state
+.chart-card.loading {
+  .chart-container {
+    @include flex-center;
+    background: var(--secondary-50);
+    border-radius: var(--radius-md);
+    
+    &::before {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--secondary-200);
+      border-top: 3px solid var(--primary-500);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

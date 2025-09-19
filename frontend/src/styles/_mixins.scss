@@ -1,0 +1,321 @@
+// Card Mixin
+@mixin card($padding: var(--spacing-lg), $radius: var(--radius-lg)) {
+  background: var(--bg-primary);
+  border-radius: $radius;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  padding: $padding;
+  transition: var(--transition-normal);
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+// Card Style Mixin (alias for card with default values)
+@mixin card-style {
+  @include card();
+}
+
+// Button Mixins
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  outline: none;
+  
+  &:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: var(--primary-500);
+  color: var(--text-inverse);
+  
+  &:hover:not(:disabled) {
+    background: var(--primary-600);
+  }
+  
+  &:active:not(:disabled) {
+    background: var(--primary-700);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  
+  &:hover:not(:disabled) {
+    background: var(--secondary-50);
+    border-color: var(--border-medium);
+  }
+  
+  &:active:not(:disabled) {
+    background: var(--secondary-100);
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background: transparent;
+  color: var(--text-secondary);
+  
+  &:hover:not(:disabled) {
+    background: var(--secondary-100);
+    color: var(--text-primary);
+  }
+  
+  &:active:not(:disabled) {
+    background: var(--secondary-200);
+  }
+}
+
+// Input Mixin
+@mixin input-base {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition-fast);
+  outline: none;
+  
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+  
+  &:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+  
+  &:disabled {
+    background: var(--secondary-50);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+// Flexbox Utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Grid Utilities
+@mixin grid-responsive($min-width: 280px, $gap: var(--spacing-lg)) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// Typography Mixins
+@mixin heading-1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@mixin heading-2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@mixin heading-3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@mixin body-text {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@mixin small-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+// Responsive Breakpoints
+$breakpoints: (
+  'xs': 480px,
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1536px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Scrollbar Styling
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--secondary-100);
+    border-radius: var(--radius-sm);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--secondary-300);
+    border-radius: var(--radius-sm);
+    
+    &:hover {
+      background: var(--secondary-400);
+    }
+  }
+}
+
+// Animation Mixins
+@mixin fade-in($duration: var(--transition-normal)) {
+  animation: fadeIn $duration ease-in-out;
+}
+
+@mixin slide-up($duration: var(--transition-normal)) {
+  animation: slideUp $duration ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Status Badge Mixin
+@mixin status-badge($color) {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  
+  @if $color == 'success' {
+    background: var(--success-100);
+    color: var(--success-700);
+  } @else if $color == 'warning' {
+    background: var(--warning-100);
+    color: var(--warning-700);
+  } @else if $color == 'error' {
+    background: var(--error-100);
+    color: var(--error-700);
+  } @else {
+    background: var(--secondary-100);
+    color: var(--secondary-700);
+  }
+}
+
+// Typography Mixins
+@mixin heading-4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+}
+
+// Flexbox Utility Mixins
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+// Mobile-first responsive mixin
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+// Tablet responsive mixin
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
